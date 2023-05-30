@@ -1,0 +1,23 @@
+{
+    "name": "cognicio/phpqrcode",
+    "description": "Ported from Sourceforge and upgraded to PHP 8.1",
+    "keywords": [
+      "phpqrcode","QR Code", "Barcode"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Ben Klein",
+        "email": "ben@cognicio.com"
+      }
+    ],
+    "require": {
+      "php": ">=8.1"
+    },
+    "autoload": {
+      "psr-4": {
+        "QrCode\\": "src/library"
+      }
+    }
+  }

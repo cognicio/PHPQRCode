@@ -30,7 +30,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
- 
+
+use QrCode\Library\qrstr;
+
     define('QRSPEC_VERSION_MAX', 40);
     define('QRSPEC_WIDTH_MAX',   177);
 
@@ -291,7 +293,7 @@
             $xStart = $ox-2;
             
             for($y=0; $y<5; $y++) {
-                QRstr::set($frame, $xStart, $yStart+$y, $finder[$y]);
+                qrstr::set($frame, $xStart, $yStart+$y, $finder[$y]);
             }
         }
 

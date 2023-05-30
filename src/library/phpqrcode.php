@@ -73,6 +73,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
+namespace QrCode\Library;
+use Exception;
  
 	// Encoding modes
 	 
@@ -1159,7 +1161,7 @@
         {
             try {
 
-                $bs = new QRbitrtream();
+                $bs = new QRbitstream();
                 
                 $bs->appendNum(4, 0x8);
                 $bs->appendNum(QRspec::lengthIndicator(QR_MODE_KANJI, $version), (int)($this->size / 2));
@@ -1295,8 +1297,8 @@
         public function __construct($version = 0, $level = QR_ECLEVEL_L)
         {
             if ($version < 0 || $version > QRSPEC_VERSION_MAX || $level > QR_ECLEVEL_H) {
-                throw new Exception('Invalid version no');
-                return NULL;
+                throw new Exception('Invalid version no', 500);
+                // return null;
             }
             
             $this->version = $version;
@@ -1313,8 +1315,8 @@
         public function setVersion($version)
         {
             if($version < 0 || $version > QRSPEC_VERSION_MAX) {
-                throw new Exception('Invalid version no');
-                return -1;
+                throw new Exception('Invalid version no', -1);
+                // return -1;
             }
 
             $this->version = $version;
@@ -1332,8 +1334,8 @@
         public function setErrorCorrectionLevel($level)
         {
             if($level > QR_ECLEVEL_H) {
-                throw new Exception('Invalid ECLEVEL');
-                return -1;
+                throw new Exception('Invalid ECLEVEL', -1);
+                // return -1;
             }
 
             $this->level = $level;
@@ -1374,7 +1376,7 @@
             $buf = array($size, $index, $parity);
             
             try {
-                $entry = new QRinputItem(QR_MODE_STRUCTURE, 3, buf);
+                $entry = new QRinputItem(QR_MODE_STRUCTURE, 3, $buf);
                 array_unshift($this->items, $entry);
                 return 0;
             } catch (Exception $e) {
@@ -1513,11 +1515,11 @@
                 return false;
 
             switch($mode) {
-                case QR_MODE_NUM:       return self::checkModeNum($size, $data);   break;
-                case QR_MODE_AN:        return self::checkModeAn($size, $data);    break;
-                case QR_MODE_KANJI:     return self::checkModeKanji($size, $data); break;
-                case QR_MODE_8:         return true; break;
-                case QR_MODE_STRUCTURE: return true; break;
+                case QR_MODE_NUM:       return self::checkModeNum($size, $data);   
+                case QR_MODE_AN:        return self::checkModeAn($size, $data);    
+                case QR_MODE_KANJI:     return self::checkModeKanji($size, $data); 
+                case QR_MODE_8:         return true; 
+                case QR_MODE_STRUCTURE: return true; 
                 
                 default:
                     break;
@@ -1632,8 +1634,8 @@
                     
                 $ver = QRspec::getMinimumVersion((int)(($bits + 7) / 8), $this->level);
                 if($ver < 0) {
-                    throw new Exception('WRONG VERSION');
-                    return -1;
+                    throw new Exception('WRONG VERSION', -1);
+                    // return -1;
                 } else if($ver > $this->getVersion()) {
                     $this->setVersion($ver);
                 } else {
@@ -2123,7 +2125,7 @@
             if($ret < 0)
                 return -1;
 
-            return $run;
+            return $ret;
         }
 
         //----------------------------------------------------------------------
@@ -2195,7 +2197,7 @@
                     case QR_MODE_NUM: $length = $this->eatNum(); break;
                     case QR_MODE_AN:  $length = $this->eatAn(); break;
                     case QR_MODE_KANJI:
-                        if ($hint == QR_MODE_KANJI)
+                        if ($this->modeHint == QR_MODE_KANJI)
                                 $length = $this->eatKanji();
                         else    $length = $this->eat8();
                         break;
@@ -2937,7 +2939,7 @@
         //----------------------------------------------------------------------
         public function getCode()
         {
-            $ret;
+            $ret = '';
 
             if($this->count < $this->dataLength) {
                 $row = $this->count % $this->blocks;
@@ -3051,7 +3053,7 @@
         //----------------------------------------------------------------------
         public function encodeString8bit($string, $version, $level)
         {
-            if(string == NULL) {
+            if($string == NULL) {
                 throw new Exception('empty string!');
                 return NULL;
             }
