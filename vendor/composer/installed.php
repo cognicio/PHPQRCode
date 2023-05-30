@@ -3,7 +3,7 @@
         'name' => 'cognicio/phpqrcode',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'f349101efedd3926361b8db0f53bfe19ff6988c1',
+        'reference' => '8fdf77659f90787e2fe54b0f41c62189b2e8473e',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'cognicio/phpqrcode' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'f349101efedd3926361b8db0f53bfe19ff6988c1',
+            'reference' => '8fdf77659f90787e2fe54b0f41c62189b2e8473e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
