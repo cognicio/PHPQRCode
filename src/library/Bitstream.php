@@ -24,9 +24,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-namespace QrCode\Library;
+namespace QRCode\Library;
 
-class QRbitstream
+class Bitstream
 {
 
     public $data = array();
@@ -47,7 +47,7 @@ class QRbitstream
     //----------------------------------------------------------------------
     public static function newFromNum($bits, $num)
     {
-        $bstream = new QRbitstream();
+        $bstream = new Bitstream();
         $bstream->allocate($bits);
 
         $mask = 1 << ($bits - 1);
@@ -66,7 +66,7 @@ class QRbitstream
     //----------------------------------------------------------------------
     public static function newFromBytes($size, $data)
     {
-        $bstream = new QRbitstream();
+        $bstream = new Bitstream();
         $bstream->allocate($size * 8);
         $p = 0;
 
@@ -87,7 +87,7 @@ class QRbitstream
     }
 
     //----------------------------------------------------------------------
-    public function append(QRbitstream $arg)
+    public function append(Bitstream $arg)
     {
         if (is_null($arg)) {
             return -1;
@@ -113,7 +113,7 @@ class QRbitstream
         if ($bits == 0)
             return 0;
 
-        $b = QRbitstream::newFromNum($bits, $num);
+        $b = Bitstream::newFromNum($bits, $num);
 
         if (is_null($b))
             return -1;
@@ -130,7 +130,7 @@ class QRbitstream
         if ($size == 0)
             return 0;
 
-        $b = QRbitstream::newFromBytes($size, $data);
+        $b = Bitstream::newFromBytes($size, $data);
 
         if (is_null($b))
             return -1;

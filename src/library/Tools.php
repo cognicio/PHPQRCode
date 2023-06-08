@@ -21,9 +21,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-namespace QrCode\Library;
+namespace QRCode\Library;
+use Spec;
 
-class QRtools
+class Tools
 {
     public static $frames = array();
 
@@ -55,7 +56,7 @@ class QRtools
             $eccLevel = $mode[1];
         }
 
-        $qrTab = QRcode::text($code, false, $eccLevel);
+        $qrTab = Code::text($code, false, $eccLevel);
         $size = count($qrTab);
 
         $barcode_array['num_rows'] = $size;
@@ -81,14 +82,14 @@ class QRtools
     //----------------------------------------------------------------------
     public static function buildCache()
     {
-        QRtools::markTime('before_build_cache');
+        Tools::markTime('before_build_cache');
 
-        $mask = new QRmask();
-        for ($a = 1; $a <= QRSPEC_VERSION_MAX; $a++) {
-            $frame = QRspec::newFrame($a);
+        $mask = new Mask();
+        for ($a = 1; $a <= Spec_VERSION_MAX; $a++) {
+            $frame = \Code\Libary\Spec::newFrame($a);
             if (QR_IMAGE) {
                 $fileName = QR_CACHE_DIR . 'frame_' . $a . '.png';
-                QRimage::png(self::binarize($frame), $fileName, 1, 0);
+                Image::png(self::binarize($frame), $fileName, 1, 0);
             }
 
             $width = count($frame);
@@ -97,7 +98,7 @@ class QRtools
                 $mask->makeMaskNo($maskNo, $width, $frame, $bitMask, true);
         }
 
-        QRtools::markTime('after_build_cache');
+        Tools::markTime('after_build_cache');
     }
 
     //----------------------------------------------------------------------
@@ -171,4 +172,3 @@ class QRtools
 
 //##########################################################################
 
-QRtools::markTime('start');

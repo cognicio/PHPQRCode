@@ -2,7 +2,7 @@
 /*
  * PHP QR Code encoder
  *
- * Root library file, prepares environment and includes dependencies
+ * Main encoder classes.
  *
  * Based on libqrencode C library distributed under LGPL 2.1
  * Copyright (C) 2006, 2007, 2008, 2009 Kentaro Fukuchi <fukuchi@megaui.net>
@@ -24,20 +24,39 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-namespace QrCode\Library;
+namespace QRCode\Library;
+use Exception;
 
-$QR_BASEDIR = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+class RsBlock
+{
+    public $dataLength;
+    public $data = array();
+    public $eccLength;
+    public $ecc = array();
 
-// Required libs
+    public function __construct($dl, $data, $el, &$ecc, RsItem $rs)
+    {
+        $rs->encode_rs_char($data, $ecc);
 
-include $QR_BASEDIR . "qrconst.php";
-include $QR_BASEDIR . "qrconfig.php";
-include $QR_BASEDIR . "qrtools.php";
-include $QR_BASEDIR . "qrspec.php";
-include $QR_BASEDIR . "qrimage.php";
-include $QR_BASEDIR . "qrinput.php";
-include $QR_BASEDIR . "qrbitstream.php";
-include $QR_BASEDIR . "qrsplit.php";
-include $QR_BASEDIR . "qrrscode.php";
-include $QR_BASEDIR . "qrmask.php";
-include $QR_BASEDIR . "qrencode.php";
+        $this->dataLength = $dl;
+        $this->data = $data;
+        $this->eccLength = $el;
+        $this->ecc = $ecc;
+    }
+}
+;
+
+//##########################################################################
+
+
+
+//##########################################################################
+
+
+
+//##########################################################################
+
+
+
+//##########################################################################    
+

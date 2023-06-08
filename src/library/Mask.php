@@ -24,14 +24,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-namespace QrCode\Library;
+namespace QRCode\Library;
 
-define('N1', 3);
-define('N2', 3);
-define('N3', 40);
-define('N4', 10);
+use QRCode\Library\Spec;
 
-class QRmask
+class Mask
 {
 
     public $runLength = array();
@@ -39,14 +36,14 @@ class QRmask
     //----------------------------------------------------------------------
     public function __construct()
     {
-        $this->runLength = array_fill(0, QRSPEC_WIDTH_MAX + 1, 0);
+        $this->runLength = array_fill(0, Spec_WIDTH_MAX + 1, 0);
     }
 
     //----------------------------------------------------------------------
     public function writeFormatInformation($width, &$frame, $mask, $level)
     {
         $blacks = 0;
-        $format = QRspec::getFormatInfo($mask, $level);
+        $format = Spec::getFormatInfo($mask, $level);
 
         for ($i = 0; $i < 8; $i++) {
             if ($format & 1) {

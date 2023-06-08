@@ -30,9 +30,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
-namespace QrCode\Library;
+namespace Code\Libary;
 
-class QRsplit
+use QRCode\Library\Input;
+use QRCode\Library\Spec;
+
+class Split
 {
 
     public $dataStr = '';
@@ -62,7 +65,7 @@ class QRsplit
         if ($pos >= strlen($str))
             return false;
 
-        return (QRinput::lookAnTable(ord($str[$pos])) >= 0);
+        return (Input::lookAnTable(ord($str[$pos])) >= 0);
     }
 
     //----------------------------------------------------------------------
@@ -94,7 +97,7 @@ class QRsplit
     //----------------------------------------------------------------------
     public function eatNum()
     {
-        $ln = QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
+        $ln = Spec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
 
         $p = 0;
         while (self::isdigitat($this->dataStr, $p)) {
@@ -105,17 +108,17 @@ class QRsplit
         $mode = $this->identifyMode($p);
 
         if ($mode == QR_MODE_8) {
-            $dif = QRinput::estimateBitsModeNum($run) + 4 + $ln
-                + QRinput::estimateBitsMode8(1) // + 4 + l8
-                - QRinput::estimateBitsMode8($run + 1); // - 4 - l8
+            $dif = Input::estimateBitsModeNum($run) + 4 + $ln
+                + Input::estimateBitsMode8(1) // + 4 + l8
+                - Input::estimateBitsMode8($run + 1); // - 4 - l8
             if ($dif > 0) {
                 return $this->eat8();
             }
         }
         if ($mode == QR_MODE_AN) {
-            $dif = QRinput::estimateBitsModeNum($run) + 4 + $ln
-                + QRinput::estimateBitsModeAn(1) // + 4 + la
-                - QRinput::estimateBitsModeAn($run + 1); // - 4 - la
+            $dif = Input::estimateBitsModeNum($run) + 4 + $ln
+                + Input::estimateBitsModeAn(1) // + 4 + la
+                - Input::estimateBitsModeAn($run + 1); // - 4 - la
             if ($dif > 0) {
                 return $this->eatAn();
             }
@@ -131,8 +134,8 @@ class QRsplit
     //----------------------------------------------------------------------
     public function eatAn()
     {
-        $la = QRspec::lengthIndicator(QR_MODE_AN, $this->input->getVersion());
-        $ln = QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
+        $la = Spec::lengthIndicator(QR_MODE_AN, $this->input->getVersion());
+        $ln = Spec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
 
         $p = 0;
 
@@ -143,9 +146,9 @@ class QRsplit
                     $q++;
                 }
 
-                $dif = QRinput::estimateBitsModeAn($p) // + 4 + la
-                    + QRinput::estimateBitsModeNum($q - $p) + 4 + $ln
-                    - QRinput::estimateBitsModeAn($q); // - 4 - la
+                $dif = Input::estimateBitsModeAn($p) // + 4 + la
+                    + Input::estimateBitsModeNum($q - $p) + 4 + $ln
+                    - Input::estimateBitsModeAn($q); // - 4 - la
 
                 if ($dif < 0) {
                     break;
@@ -160,9 +163,9 @@ class QRsplit
         $run = $p;
 
         if (!self::isalnumat($this->dataStr, $p)) {
-            $dif = QRinput::estimateBitsModeAn($run) + 4 + $la
-                + QRinput::estimateBitsMode8(1) // + 4 + l8
-                - QRinput::estimateBitsMode8($run + 1); // - 4 - l8
+            $dif = Input::estimateBitsModeAn($run) + 4 + $la
+                + Input::estimateBitsMode8(1) // + 4 + l8
+                - Input::estimateBitsMode8($run + 1); // - 4 - l8
             if ($dif > 0) {
                 return $this->eat8();
             }
@@ -194,8 +197,8 @@ class QRsplit
     //----------------------------------------------------------------------
     public function eat8()
     {
-        $la = QRspec::lengthIndicator(QR_MODE_AN, $this->input->getVersion());
-        $ln = QRspec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
+        $la = Spec::lengthIndicator(QR_MODE_AN, $this->input->getVersion());
+        $ln = Spec::lengthIndicator(QR_MODE_NUM, $this->input->getVersion());
 
         $p = 1;
         $dataStrLen = strlen($this->dataStr);
@@ -211,9 +214,9 @@ class QRsplit
                 while (self::isdigitat($this->dataStr, $q)) {
                     $q++;
                 }
-                $dif = QRinput::estimateBitsMode8($p) // + 4 + l8
-                    + QRinput::estimateBitsModeNum($q - $p) + 4 + $ln
-                    - QRinput::estimateBitsMode8($q); // - 4 - l8
+                $dif = Input::estimateBitsMode8($p) // + 4 + l8
+                    + Input::estimateBitsModeNum($q - $p) + 4 + $ln
+                    - Input::estimateBitsMode8($q); // - 4 - l8
                 if ($dif < 0) {
                     break;
                 } else {
@@ -224,9 +227,9 @@ class QRsplit
                 while (self::isalnumat($this->dataStr, $q)) {
                     $q++;
                 }
-                $dif = QRinput::estimateBitsMode8($p) // + 4 + l8
-                    + QRinput::estimateBitsModeAn($q - $p) + 4 + $la
-                    - QRinput::estimateBitsMode8($q); // - 4 - l8
+                $dif = Input::estimateBitsMode8($p) // + 4 + l8
+                    + Input::estimateBitsModeAn($q - $p) + 4 + $la
+                    - Input::estimateBitsMode8($q); // - 4 - l8
                 if ($dif < 0) {
                     break;
                 } else {
@@ -305,13 +308,13 @@ class QRsplit
     }
 
     //----------------------------------------------------------------------
-    public static function splitStringToQRinput($string, QRinput $input, $modeHint, $casesensitive = true)
+    public static function splitStringToInput($string, Input $input, $modeHint, $casesensitive = true)
     {
         if (is_null($string) || $string == '\0' || $string == '') {
             throw new \Exception('empty string!!!');
         }
 
-        $split = new QRsplit($string, $input, $modeHint);
+        $split = new Split($string, $input, $modeHint);
 
         if (!$casesensitive)
             $split->toUpper();
